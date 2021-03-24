@@ -1,10 +1,10 @@
-// Create a button and h1
+// Link the HTML, buttons and input-field to the JS
 const $ = document.querySelector.bind(document);
 const adviceButton = $("#advicebtn");
 let h1 = $("#h1");
 let inputField = $("#input-field");
-const form = $("#form");
-let userSearch = inputField.value;
+let userSearch = inputField.value.toLowerCase();
+const resetButton = $("#resetbtn");
 
 // Fetch random advice.
 const fetchData = async () => {
@@ -16,10 +16,10 @@ const fetchData = async () => {
 };
 
 // Fetch random advice depending on user input
-const fetchDataSearch = async (id) => {
-  const res = await fetch(`https://api.adviceslip.com/advice/search/${id}`);
+let fetchDataSearch = async (id) => {
+  let res = await fetch(`https://api.adviceslip.com/advice/search/${id}`);
   console.log(res);
-  const result = await res.json();
+  let result = await res.json();
   h1.innerHTML = result.slips[0].advice;
 };
 
@@ -28,7 +28,15 @@ adviceButton.onclick = () => {
   fetchData();
 };
 
-form.onsubmit = (e) => {
-  e.preventDefault();
-  fetchDataSearch(userSearch);
+// Search functionality
+inputField.addEventListener("keyup", function (event) {
+  if (event.key === "Enter") {
+    // Do work
+    fetchDataSearch(userSearch);
+  }
+});
+
+// Reset button
+resetButton.onclick = () => {
+  window.location.reload();
 };
